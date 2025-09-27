@@ -1,2 +1,6 @@
 .env
 *venv
+# flow
+emulator-account.pkey
+imports
+.env
