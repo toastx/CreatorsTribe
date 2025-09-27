@@ -1,0 +1,38 @@
+services:
+  spark-iceberg:
+    image: tabulario/spark-iceberg
+    container_name: spark-iceberg
+    build: spark/
+    networks:
+      iceberg_net:
+    depends_on:
+      - rest
+    volumes:
+      - ./warehouse:/home/iceberg/warehouse
+      - ./notebooks:/home/iceberg/notebooks/notebooks
+    environment:
+      - AWS_ACCESS_KEY_ID=O3_N0HIPKET8MQN5FK5K
+      - AWS_SECRET_ACCESS_KEY=lDKZA1F5vFKBPn5b7kF6f0QcepZJtBHNuXgNIOU
+      - AWS_REGION=akave-network
+    ports:
+      - 8888:8888
+      - 8080:8080
+      - 10000:10000
+      - 10001:10001
+  rest:
+    image: apache/iceberg-rest-fixture
+    container_name: iceberg-rest
+    networks:
+      iceberg_net:
+    ports:
+      - 8181:8181
+    environment:
+      - AWS_ACCESS_KEY_ID=O3_N0HIPKET8MQN5FK5K
+      - AWS_SECRET_ACCESS_KEY=lDKZA1F5vFKBPn5b7kF6f0QcepZJtBHNuXgNIOU
+      - AWS_REGION=akave-network
+      - CATALOG_WAREHOUSE=s3://test-bucket/warehouse/
+      - CATALOG_IO__IMPL=org.apache.iceberg.aws.s3.S3FileIO
+      - CATALOG_S3_ENDPOINT=https://o3-rc2.akave.xyz
+
+networks:
+  iceberg_net:
