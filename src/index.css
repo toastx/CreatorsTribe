@@ -1,0 +1,284 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ULTIMATE SocialFi Design System - Bleeding-edge visual revolution */
+
+@layer base {
+  :root {
+    /* Cyberpunk Core */
+    --background: 0 0 8;
+    --foreground: 255 255 255;
+
+    /* Neon Surfaces */
+    --card: 5 5 20;
+    --card-foreground: 255 255 255;
+    --card-elevated: 10 10 30;
+
+    /* Floating Elements */
+    --popover: 8 8 25;
+    --popover-foreground: 255 255 255;
+
+    /* Electric Primaries */
+    --primary: 0 255 255; /* Cyan neon */
+    --primary-foreground: 0 0 0;
+    --primary-hover: 0 220 255;
+
+    /* Creator Aura */
+    --creator: 255 0 255; /* Magenta electric */
+    --creator-foreground: 0 0 0;
+    --creator-hover: 220 0 255;
+
+    /* Success Pulse */
+    --success: 0 255 150;
+    --success-foreground: 0 0 0;
+    --success-hover: 0 220 120;
+
+    /* Secondary Glow */
+    --secondary: 20 20 40;
+    --secondary-foreground: 200 200 255;
+    --secondary-hover: 30 30 60;
+
+    /* Muted Depths */
+    --muted: 15 15 35;
+    --muted-foreground: 150 150 200;
+
+    /* Accent Beams */
+    --accent: 25 25 50;
+    --accent-foreground: 100 255 255;
+
+    /* Danger Flare */
+    --destructive: 255 50 50;
+    --destructive-foreground: 255 255 255;
+
+    /* Interface Elements */
+    --border: 40 40 80;
+    --input: 12 12 30;
+    --ring: 0 255 255;
+
+    /* Holographic Gradients */
+    --gradient-primary: linear-gradient(135deg, 
+      hsl(180 100% 50%), 
+      hsl(270 100% 50%), 
+      hsl(320 100% 50%));
+    --gradient-creator: linear-gradient(135deg, 
+      hsl(300 100% 50%), 
+      hsl(240 100% 60%), 
+      hsl(200 100% 70%));
+    --gradient-success: linear-gradient(135deg, 
+      hsl(150 100% 50%), 
+      hsl(120 100% 60%), 
+      hsl(180 100% 40%));
+    --gradient-mesh: 
+      radial-gradient(circle at 20% 50%, hsl(180 100% 50% / 0.3) 0%, transparent 70%), 
+      radial-gradient(circle at 80% 20%, hsl(300 100% 50% / 0.3) 0%, transparent 70%),
+      radial-gradient(circle at 40% 80%, hsl(240 100% 60% / 0.2) 0%, transparent 70%),
+      radial-gradient(circle at 60% 40%, hsl(150 100% 50% / 0.2) 0%, transparent 70%);
+
+    /* Neon Shadows */
+    --shadow-soft: 0 0 10px hsl(180 100% 50% / 0.3);
+    --shadow-medium: 0 0 20px hsl(180 100% 50% / 0.4), 0 0 40px hsl(300 100% 50% / 0.2);
+    --shadow-large: 0 0 30px hsl(180 100% 50% / 0.5), 0 0 60px hsl(300 100% 50% / 0.3), 0 0 90px hsl(240 100% 60% / 0.2);
+    --shadow-glow: 0 0 20px hsl(var(--primary) / 0.6), 0 0 40px hsl(var(--primary) / 0.4), 0 0 60px hsl(var(--primary) / 0.2);
+
+    /* Hyper Animation Durations */
+    --duration-fast: 150ms;
+    --duration-normal: 300ms;
+    --duration-slow: 600ms;
+
+    /* Rounded Perfection */
+    --radius: 1rem;
+    --radius-sm: 0.75rem;
+    --radius-lg: 1.5rem;
+  }
+
+  .dark {
+    /* ULTRA Dark Mode - Maximum cyberpunk intensity */
+    --background: 0 0 0;
+    --foreground: 255 255 255;
+
+    --card: 2 2 15;
+    --card-foreground: 255 255 255;
+    --card-elevated: 5 5 25;
+
+    --popover: 3 3 18;
+    --popover-foreground: 255 255 255;
+
+    --primary: 0 255 255;
+    --primary-foreground: 0 0 0;
+    --primary-hover: 0 200 255;
+
+    --creator: 255 100 255;
+    --creator-foreground: 0 0 0;
+    --creator-hover: 255 50 255;
+
+    --success: 50 255 150;
+    --success-foreground: 0 0 0;
+    --success-hover: 0 255 100;
+
+    --secondary: 15 15 35;
+    --secondary-foreground: 200 200 255;
+    --secondary-hover: 25 25 50;
+
+    --muted: 10 10 25;
+    --muted-foreground: 120 120 180;
+
+    --accent: 20 20 45;
+    --accent-foreground: 150 255 255;
+
+    --destructive: 255 0 100;
+    --destructive-foreground: 255 255 255;
+
+    --border: 30 30 60;
+    --input: 8 8 20;
+    --ring: 0 255 255;
+
+    --gradient-mesh: 
+      radial-gradient(circle at 20% 50%, hsl(180 100% 50% / 0.4) 0%, transparent 70%), 
+      radial-gradient(circle at 80% 20%, hsl(300 100% 50% / 0.4) 0%, transparent 70%),
+      radial-gradient(circle at 40% 80%, hsl(240 100% 60% / 0.3) 0%, transparent 70%),
+      radial-gradient(circle at 60% 40%, hsl(150 100% 50% / 0.3) 0%, transparent 70%);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-medium antialiased;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@layer components {
+  /* HYPER Interactive Elements */
+  .card-interactive {
+    @apply transition-all duration-300 hover:shadow-large hover:-translate-y-2 hover:scale-105 cursor-pointer backdrop-blur-sm border border-primary/20;
+  }
+
+  .card-glow {
+    @apply shadow-glow transition-all duration-300 animate-pulse-glow;
+  }
+
+  .button-glow {
+    @apply relative overflow-hidden transition-all duration-300 shadow-glow;
+  }
+
+  .button-glow::before {
+    @apply absolute inset-0 bg-gradient-to-r from-transparent via-primary/30 to-transparent transform -skew-x-12 -translate-x-full transition-transform duration-500;
+    content: '';
+  }
+
+  .button-glow:hover::before {
+    @apply translate-x-full;
+  }
+
+  .button-glow::after {
+    @apply absolute inset-0 bg-gradient-primary opacity-0 transition-opacity duration-300;
+    content: '';
+    z-index: -1;
+  }
+
+  .button-glow:hover::after {
+    @apply opacity-20;
+  }
+
+  /* HOLOGRAPHIC Text */
+  .text-gradient-primary {
+    @apply bg-gradient-primary bg-clip-text text-transparent animate-shimmer;
+    background-size: 200% 200%;
+  }
+
+  .text-gradient-creator {
+    @apply bg-gradient-creator bg-clip-text text-transparent animate-shimmer;
+    background-size: 200% 200%;
+  }
+
+  .text-holographic {
+    @apply text-transparent bg-gradient-to-r from-primary via-creator to-success bg-clip-text;
+    background-size: 200% 200%;
+    animation: holographic 3s ease-in-out infinite;
+  }
+
+  /* COSMIC Mesh Background */
+  .bg-mesh {
+    @apply bg-gradient-mesh relative;
+  }
+
+  .bg-mesh::before {
+    @apply absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-creator/10;
+    content: '';
+    animation: cosmic-drift 20s ease-in-out infinite;
+  }
+
+  /* QUANTUM Shimmer Effect */
+  .shimmer {
+    @apply relative overflow-hidden;
+  }
+
+  .shimmer::before {
+    @apply absolute inset-0 bg-gradient-to-r from-transparent via-primary/40 to-transparent transform translate-x-[-100%];
+    content: '';
+    background-size: 200% 100%;
+    animation: quantum-shimmer 2s ease-in-out infinite;
+  }
+
+  /* NEON Focus States */
+  .focus-ring {
+    @apply focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background focus:shadow-glow;
+  }
+
+  /* KINETIC Animation Utilities */
+  .animate-on-scroll {
+    @apply opacity-0 translate-y-8;
+    animation: kinetic-rise 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  }
+
+  .float-pulse {
+    animation: float-pulse 4s ease-in-out infinite;
+  }
+
+  .cyber-blink {
+    animation: cyber-blink 2s ease-in-out infinite;
+  }
+
+  .matrix-rain {
+    @apply absolute inset-0 pointer-events-none overflow-hidden;
+  }
+
+  .matrix-rain::before {
+    @apply absolute inset-0 bg-gradient-to-b from-transparent via-primary/5 to-transparent;
+    content: '';
+    animation: matrix-fall 3s linear infinite;
+  }
+
+  /* LOADING States */
+  .skeleton {
+    @apply animate-pulse bg-gradient-to-r from-muted via-primary/20 to-muted rounded;
+    background-size: 200% 100%;
+    animation: skeleton-glow 1.5s ease-in-out infinite;
+  }
+
+  /* ENERGY Particles */
+  .particle-field {
+    @apply absolute inset-0 pointer-events-none;
+  }
+
+  .particle-field::before {
+    @apply absolute inset-0;
+    content: '';
+    background-image: 
+      radial-gradient(2px 2px at 20px 30px, hsl(var(--primary)), transparent),
+      radial-gradient(2px 2px at 40px 70px, hsl(var(--creator)), transparent),
+      radial-gradient(1px 1px at 60px 20px, hsl(var(--success)), transparent),
+      radial-gradient(1px 1px at 80px 50px, hsl(var(--primary)), transparent);
+    background-size: 100px 100px;
+    animation: particle-drift 15s linear infinite;
+  }
+}
