@@ -84,6 +84,17 @@ export default {
         'float': 'float 3s ease-in-out infinite',
         'shimmer': 'shimmer 2s ease-in-out infinite',
         'count-up': 'countUp var(--duration-slow) ease-out',
+        'holographic': 'holographic 3s ease-in-out infinite',
+        'cosmic-drift': 'cosmic-drift 20s ease-in-out infinite',
+        'quantum-shimmer': 'quantum-shimmer 2s ease-in-out infinite',
+        'kinetic-rise': 'kinetic-rise 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards',
+        'float-pulse': 'float-pulse 4s ease-in-out infinite',
+        'cyber-blink': 'cyber-blink 2s ease-in-out infinite',
+        'matrix-fall': 'matrix-fall 3s linear infinite',
+        'skeleton-glow': 'skeleton-glow 1.5s ease-in-out infinite',
+        'particle-drift': 'particle-drift 15s linear infinite',
+        'energy-burst': 'energy-burst 0.6s ease-out',
+        'neon-pulse': 'neon-pulse 1.5s ease-in-out infinite',
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
       },
@@ -113,12 +124,16 @@ export default {
           '50%': { transform: 'translateY(-4px)' },
         },
         pulseGlow: {
-          '0%, 100%': { boxShadow: '0 0 20px hsl(var(--primary) / 0.4)' },
-          '50%': { boxShadow: '0 0 40px hsl(var(--primary) / 0.6)' },
+          '0%, 100%': { 
+            boxShadow: '0 0 20px hsl(var(--primary) / 0.4), 0 0 40px hsl(var(--creator) / 0.2)' 
+          },
+          '50%': { 
+            boxShadow: '0 0 40px hsl(var(--primary) / 0.7), 0 0 80px hsl(var(--creator) / 0.4)' 
+          },
         },
         float: {
-          '0%, 100%': { transform: 'translateY(0px)' },
-          '50%': { transform: 'translateY(-8px)' },
+          '0%, 100%': { transform: 'translateY(0px) rotate(0deg)' },
+          '50%': { transform: 'translateY(-12px) rotate(1deg)' },
         },
         shimmer: {
           '0%': { backgroundPosition: '-200% 0' },
@@ -128,7 +143,84 @@ export default {
           '0%': { transform: 'scale(1.2)' },
           '100%': { transform: 'scale(1)' },
         },
-        // ... keep existing accordion animations
+        holographic: {
+          '0%, 100%': { backgroundPosition: '0% 50%' },
+          '50%': { backgroundPosition: '100% 50%' },
+        },
+        'cosmic-drift': {
+          '0%, 100%': { transform: 'translateX(0%) translateY(0%) rotate(0deg)' },
+          '33%': { transform: 'translateX(30%) translateY(-30%) rotate(120deg)' },
+          '66%': { transform: 'translateX(-20%) translateY(20%) rotate(240deg)' },
+        },
+        'quantum-shimmer': {
+          '0%': { 
+            transform: 'translateX(-100%)',
+            opacity: '0'
+          },
+          '50%': {
+            opacity: '1'
+          },
+          '100%': { 
+            transform: 'translateX(100%)',
+            opacity: '0'
+          },
+        },
+        'kinetic-rise': {
+          '0%': { 
+            opacity: '0', 
+            transform: 'translateY(40px) scale(0.9)',
+            filter: 'blur(4px)'
+          },
+          '100%': { 
+            opacity: '1', 
+            transform: 'translateY(0) scale(1)',
+            filter: 'blur(0px)'
+          },
+        },
+        'float-pulse': {
+          '0%, 100%': { 
+            transform: 'translateY(0px) scale(1)',
+            boxShadow: '0 0 20px hsl(var(--primary) / 0.3)'
+          },
+          '50%': { 
+            transform: 'translateY(-8px) scale(1.02)',
+            boxShadow: '0 0 40px hsl(var(--primary) / 0.5)'
+          },
+        },
+        'cyber-blink': {
+          '0%, 90%, 100%': { opacity: '1' },
+          '95%': { opacity: '0.1' },
+        },
+        'matrix-fall': {
+          '0%': { transform: 'translateY(-100%)' },
+          '100%': { transform: 'translateY(100vh)' },
+        },
+        'skeleton-glow': {
+          '0%': { backgroundPosition: '-200% 0' },
+          '100%': { backgroundPosition: '200% 0' },
+        },
+        'particle-drift': {
+          '0%': { transform: 'translateY(0px) translateX(0px)' },
+          '100%': { transform: 'translateY(-100px) translateX(50px)' },
+        },
+        'energy-burst': {
+          '0%': { 
+            transform: 'scale(0) rotate(0deg)',
+            opacity: '1'
+          },
+          '100%': { 
+            transform: 'scale(2) rotate(180deg)',
+            opacity: '0'
+          },
+        },
+        'neon-pulse': {
+          '0%, 100%': { 
+            filter: 'brightness(1) drop-shadow(0 0 5px hsl(var(--primary)))'
+          },
+          '50%': { 
+            filter: 'brightness(1.3) drop-shadow(0 0 20px hsl(var(--primary)))'
+          },
+        },
         "accordion-down": {
           from: { height: "0" },
           to: { height: "var(--radix-accordion-content-height)" },
