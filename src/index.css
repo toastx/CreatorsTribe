@@ -2,95 +2,129 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* SocialFi Design System - Flow-inspired clean aesthetic with kinetic energy */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Flow-inspired Base Colors */
+    --background: 251 252 255;
+    --foreground: 15 23 42;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    /* Card & Surface */
+    --card: 255 255 255;
+    --card-foreground: 15 23 42;
+    --card-elevated: 248 250 252;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    /* Interactive Elements */
+    --popover: 255 255 255;
+    --popover-foreground: 15 23 42;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    /* Brand Colors - Vibrant but consumer-friendly */
+    --primary: 239 68 68; /* Flow-like red accent */
+    --primary-foreground: 255 255 255;
+    --primary-hover: 220 38 38;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    /* Creator Token Colors */
+    --creator: 168 85 247; /* Purple for creator features */
+    --creator-foreground: 255 255 255;
+    --creator-hover: 147 51 234;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    /* Success & Growth */
+    --success: 34 197 94;
+    --success-foreground: 255 255 255;
+    --success-hover: 22 163 74;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    /* Secondary Actions */
+    --secondary: 241 245 249;
+    --secondary-foreground: 51 65 85;
+    --secondary-hover: 226 232 240;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    /* Muted Elements */
+    --muted: 248 250 252;
+    --muted-foreground: 100 116 139;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    /* Accent Colors */
+    --accent: 236 254 255;
+    --accent-foreground: 14 116 144;
 
-    --radius: 0.5rem;
+    /* Destructive */
+    --destructive: 239 68 68;
+    --destructive-foreground: 255 255 255;
 
-    --sidebar-background: 0 0% 98%;
+    /* Borders & Inputs */
+    --border: 226 232 240;
+    --input: 241 245 249;
+    --ring: 239 68 68;
 
-    --sidebar-foreground: 240 5.3% 26.1%;
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--creator)));
+    --gradient-creator: linear-gradient(135deg, hsl(var(--creator)), hsl(220 70% 60%));
+    --gradient-success: linear-gradient(135deg, hsl(var(--success)), hsl(168 76% 42%));
+    --gradient-mesh: radial-gradient(circle at 20% 50%, hsl(var(--primary) / 0.15) 0%, transparent 50%), 
+                     radial-gradient(circle at 80% 20%, hsl(var(--creator) / 0.15) 0%, transparent 50%),
+                     radial-gradient(circle at 40% 80%, hsl(var(--success) / 0.1) 0%, transparent 50%);
 
-    --sidebar-primary: 240 5.9% 10%;
+    /* Shadows */
+    --shadow-soft: 0 1px 3px 0 hsl(var(--foreground) / 0.1), 0 1px 2px 0 hsl(var(--foreground) / 0.06);
+    --shadow-medium: 0 4px 6px -1px hsl(var(--foreground) / 0.1), 0 2px 4px -1px hsl(var(--foreground) / 0.06);
+    --shadow-large: 0 10px 15px -3px hsl(var(--foreground) / 0.1), 0 4px 6px -2px hsl(var(--foreground) / 0.05);
+    --shadow-glow: 0 0 0 1px hsl(var(--primary) / 0.1), 0 8px 25px -8px hsl(var(--primary) / 0.4);
 
-    --sidebar-primary-foreground: 0 0% 98%;
+    /* Animation Durations */
+    --duration-fast: 200ms;
+    --duration-normal: 300ms;
+    --duration-slow: 500ms;
 
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    /* Spacing & Sizing */
+    --radius: 0.75rem;
+    --radius-sm: 0.5rem;
+    --radius-lg: 1rem;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
+    /* Dark Mode - Still clean but with depth */
+    --background: 2 6 23;
+    --foreground: 248 250 252;
 
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
+    --card: 15 23 42;
+    --card-foreground: 248 250 252;
+    --card-elevated: 30 41 59;
 
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 15 23 42;
+    --popover-foreground: 248 250 252;
 
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    --primary: 248 113 113;
+    --primary-foreground: 15 23 42;
+    --primary-hover: 239 68 68;
 
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
+    --creator: 196 181 253;
+    --creator-foreground: 15 23 42;
+    --creator-hover: 168 85 247;
 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --success: 74 222 128;
+    --success-foreground: 15 23 42;
+    --success-hover: 34 197 94;
 
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
+    --secondary: 30 41 59;
+    --secondary-foreground: 203 213 225;
+    --secondary-hover: 51 65 85;
 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
+    --muted: 30 41 59;
+    --muted-foreground: 148 163 184;
 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --accent: 30 41 59;
+    --accent-foreground: 125 211 252;
+
+    --destructive: 239 68 68;
+    --destructive-foreground: 248 250 252;
+
+    --border: 51 65 85;
+    --input: 30 41 59;
+    --ring: 248 113 113;
+
+    --gradient-mesh: radial-gradient(circle at 20% 50%, hsl(var(--primary) / 0.2) 0%, transparent 50%), 
+                     radial-gradient(circle at 80% 20%, hsl(var(--creator) / 0.2) 0%, transparent 50%),
+                     radial-gradient(circle at 40% 80%, hsl(var(--success) / 0.15) 0%, transparent 50%);
   }
 }
 
@@ -100,6 +134,76 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-medium antialiased;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@layer components {
+  /* Interactive Elements */
+  .card-interactive {
+    @apply transition-all duration-300 hover:shadow-medium hover:-translate-y-1 cursor-pointer;
+  }
+
+  .card-glow {
+    @apply shadow-glow transition-all duration-300;
+  }
+
+  .button-glow {
+    @apply relative overflow-hidden transition-all duration-300;
+  }
+
+  .button-glow::before {
+    @apply absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent transform -skew-x-12 -translate-x-full transition-transform duration-700;
+    content: '';
+  }
+
+  .button-glow:hover::before {
+    @apply translate-x-full;
+  }
+
+  /* Gradient Text */
+  .text-gradient-primary {
+    @apply bg-gradient-primary bg-clip-text text-transparent;
+  }
+
+  .text-gradient-creator {
+    @apply bg-gradient-creator bg-clip-text text-transparent;
+  }
+
+  /* Mesh Background */
+  .bg-mesh {
+    @apply bg-gradient-mesh;
+  }
+
+  /* Shimmer Effect */
+  .shimmer {
+    @apply relative overflow-hidden;
+  }
+
+  .shimmer::before {
+    @apply absolute inset-0 bg-gradient-to-r from-transparent via-white/60 to-transparent transform translate-x-[-100%] animate-shimmer;
+    content: '';
+    background-size: 200% 100%;
+  }
+
+  /* Focus States */
+  .focus-ring {
+    @apply focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background;
+  }
+
+  /* Animation Utilities */
+  .animate-on-scroll {
+    @apply opacity-0 translate-y-8;
+    animation: fadeIn 0.6s ease-out forwards;
+  }
+
+  /* Loading States */
+  .skeleton {
+    @apply animate-pulse bg-muted rounded;
   }
 }
