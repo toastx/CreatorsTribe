@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -28,6 +28,7 @@ const navigation = [
 export function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
 
   const isActive = (path: string) => location.pathname.startsWith(path);
 
@@ -37,6 +38,14 @@ export function Navbar() {
       <nav className="hidden md:flex fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-lg border-b border-border">
         <div className="w-full max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
+            {/* Logo */}
+            <div className="flex items-center mr-6 cursor-pointer" onClick={() => navigate('/')}>
+              <img 
+                src="/logo.jpg" 
+                alt="CreatorsTribe Logo" 
+                className="h-10 w-auto"
+              />
+            </div>
 
             {/* Navigation Links */}
             <div className="flex items-center space-x-1">
@@ -83,6 +92,13 @@ export function Navbar() {
       <nav className="md:hidden fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-lg border-b border-border">
         <div className="px-4 py-3">
           <div className="flex items-center justify-between">
+            <div className="flex items-center cursor-pointer" onClick={() => navigate('/')}>
+              <img 
+                src="/logo.jpg" 
+                alt="CreatorsTribe Logo" 
+                className="h-10 w-auto"
+              />
+            </div>
 
             <Button
               variant="ghost"
