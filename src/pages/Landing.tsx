@@ -93,12 +93,12 @@ export default function Landing() {
             className="text-center space-y-12 w-full"
           >
             {/* NEON Badge */}
-            <motion.div variants={staggerItem} className="flex justify-center">
+            {/* <motion.div variants={staggerItem} className="flex justify-center">
               <Badge className="bg-primary/20 text-primary border-primary/40 px-6 py-3 text-lg shadow-glow backdrop-blur-sm cyber-blink">
                 <Sparkles className="w-5 h-5 mr-2 animate-neon-pulse" />
                 ENTER THE CREATOR METAVERSE
               </Badge>
-            </motion.div>
+            </motion.div> */}
 
             {/* HOLOGRAPHIC Headline */}
             <motion.div variants={staggerItem} className="space-y-8">
