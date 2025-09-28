@@ -1,0 +1,110 @@
+import { useState } from "react";
+import { motion } from "framer-motion";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { 
+  Search, 
+  Filter, 
+  TrendingUp, 
+  Users, 
+  Star, 
+  Play,
+  Heart,
+  MessageCircle,
+  Share,
+  Coins
+} from "lucide-react";
+import { pageTransitions, staggerContainer, staggerItem, cardHover } from "@/lib/motion";
+import { Navbar } from "@/components/ui/navbar";
+
+// Mock creator data
+const creators = [
+  {
+    id: 1,
+    name: "Sarah Chen",
+    username: "@sarahcreates",
+    avatar: "🎨",
+    bio: "Digital artist creating unique NFT collections and exclusive tutorials",
+    tokenSymbol: "SARAH",
+    tokenPrice: "$2.89",
+    holders: "2.8K",
+    contentCount: "124",
+    category: "Art",
+    verified: true,
+    trending: true,
+    tags: ["Digital Art", "NFTs", "Tutorials"],
+    backgroundGradient: "from-pink-500 to-purple-600"
+  },
+  // ... (other creator objects remain the same)
+];
+
+const categories = ["All", "Art", "Music", "Photography", "Film", "Tech", "Fitness", "Gaming", "Fashion"];
+
+export default function Explore() {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [showTrendingOnly, setShowTrendingOnly] = useState(false);
+  const navigate = useNavigate();
+
+  const filteredCreators = creators.filter(creator => {
+    const matchesSearch = creator.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                         creator.username.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                         creator.bio.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesCategory = selectedCategory === "All" || creator.category === selectedCategory;
+    const matchesTrending = !showTrendingOnly || creator.trending;
+    
+    return matchesSearch && matchesCategory && matchesTrending;
+  });
+
+  // ... (rest of the component remains the same until the action buttons section)
+
+  return (
+    <>
+      <Navbar />
+      <motion.div
+        variants={pageTransitions}
+        initial="initial"
+        animate="animate"
+        exit="exit"
+        className="min-h-screen bg-background"
+      >
+        {/* ... (rest of the JSX remains the same) ... */}
+        
+        {/* Inside the creator card, update the action buttons section */}
+        <div className="flex flex-col gap-2">
+          <div className="flex gap-2">
+            <Button size="sm" className="flex-1">
+              <Users className="w-4 h-4 mr-2" />
+              Follow
+            </Button>
+            <Button size="sm" variant="outline">
+              <Play className="w-4 h-4" />
+            </Button>
+            <Button size="sm" variant="outline">
+              <Heart className="w-4 h-4" />
+            </Button>
+            <Button size="sm" variant="outline">
+              <Share className="w-4 h-4" />
+            </Button>
+          </div>
+          <Button 
+            size="sm" 
+            variant="secondary" 
+            className="w-full bg-gradient-to-r from-amber-500 to-yellow-500 text-white hover:from-amber-600 hover:to-yellow-600"
+            onClick={(e) => {
+              e.stopPropagation();
+              navigate(`/profile/${creator.username.replace('@', '')}?tab=stake`);
+            }}
+          >
+            <Coins className="w-4 h-4 mr-2" />
+            Stake to Support
+          </Button>
+        </div>
+        
+        {/* ... (rest of the component remains the same) ... */}
+      </motion.div>
+    </>
+  );
+}

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -13,7 +14,8 @@ import {
   Play,
   Heart,
   MessageCircle,
-  Share
+  Share,
+  Coins
 } from "lucide-react";
 import { pageTransitions, staggerContainer, staggerItem, cardHover } from "@/lib/motion";
 import { Navbar } from "@/components/ui/navbar";
@@ -42,7 +44,7 @@ const creators = [
     username: "@alexbeats",
     avatar: "🎵",
     bio: "Music producer sharing beats, behind-the-scenes content, and collabs",
-    tokenSymbol: "ALEX", 
+    tokenSymbol: "ALEX",
     tokenPrice: "$1.45",
     holders: "1.9K",
     contentCount: "89",
@@ -67,54 +69,6 @@ const creators = [
     trending: true,
     tags: ["Photography", "Editing", "Travel"],
     backgroundGradient: "from-green-500 to-emerald-500"
-  },
-  {
-    id: 4,
-    name: "Jordan Kim",
-    username: "@jordanfilms",
-    avatar: "🎬",
-    bio: "Filmmaker creating documentary content and film education",
-    tokenSymbol: "JORDAN",
-    tokenPrice: "$2.67",
-    holders: "2.1K",
-    contentCount: "78",
-    category: "Film",
-    verified: false,
-    trending: false,
-    tags: ["Documentary", "Education", "Cinema"],
-    backgroundGradient: "from-orange-500 to-red-500"
-  },
-  {
-    id: 5,
-    name: "Lisa Zhang",
-    username: "@lisacodes",
-    avatar: "💻",
-    bio: "Software developer teaching coding and sharing tech insights",
-    tokenSymbol: "LISA",
-    tokenPrice: "$4.12",
-    holders: "4.1K",
-    contentCount: "203",
-    category: "Tech",
-    verified: true,
-    trending: true,
-    tags: ["Coding", "Web Dev", "AI"],
-    backgroundGradient: "from-violet-500 to-purple-500"
-  },
-  {
-    id: 6,
-    name: "Marcus Rodriguez",
-    username: "@marcusfits",
-    avatar: "💪",
-    bio: "Fitness coach sharing workout routines and nutrition advice",
-    tokenSymbol: "MARCUS",
-    tokenPrice: "$1.89",
-    holders: "1.7K",
-    contentCount: "167",
-    category: "Fitness",
-    verified: true,
-    trending: false,
-    tags: ["Fitness", "Nutrition", "Wellness"],
-    backgroundGradient: "from-red-500 to-pink-500"
   }
 ];
 
@@ -124,6 +78,7 @@ export default function Explore() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [showTrendingOnly, setShowTrendingOnly] = useState(false);
+  const navigate = useNavigate();
 
   const filteredCreators = creators.filter(creator => {
     const matchesSearch = creator.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -180,30 +135,21 @@ export default function Explore() {
                   className="whitespace-nowrap"
                 >
                   <TrendingUp className="w-4 h-4 mr-2" />
-                  Trending
+                  {showTrendingOnly ? 'All Creators' : 'Trending'}
                 </Button>
-                <Button variant="outline">
-                  <Filter className="w-4 h-4 mr-2" />
-                  Filters
-                </Button>
+                {categories.map((category) => (
+                  <Button
+                    key={category}
+                    variant={selectedCategory === category ? 'default' : 'outline'}
+                    onClick={() => setSelectedCategory(category)}
+                    className="whitespace-nowrap"
+                  >
+                    {category}
+                  </Button>
+                ))}
               </div>
             </motion.div>
-
-            {/* Category Tabs */}
-            <motion.div variants={staggerItem} className="flex gap-2 overflow-x-auto pb-2">
-              {categories.map((category) => (
-                <Button
-                  key={category}
-                  variant={selectedCategory === category ? "default" : "outline"}
-                  size="sm"
-                  onClick={() => setSelectedCategory(category)}
-                  className="whitespace-nowrap"
-                >
-                  {category}
-                </Button>
-              ))}
             </motion.div>
-          </motion.div>
 
           {/* Results Count */}
           <motion.div
@@ -226,7 +172,7 @@ export default function Explore() {
             animate="animate"
             className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
           >
-            {filteredCreators.map((creator, index) => (
+            {filteredCreators.map((creator) => (
               <motion.div
                 key={creator.id}
                 variants={staggerItem}
@@ -293,19 +239,33 @@ export default function Explore() {
                         </div>
 
                         {/* Action Buttons */}
-                        <div className="flex gap-2">
-                          <Button size="sm" className="flex-1">
-                            <Users className="w-4 h-4 mr-2" />
-                            Follow
-                          </Button>
-                          <Button size="sm" variant="outline">
-                            <Play className="w-4 h-4" />
-                          </Button>
-                          <Button size="sm" variant="outline">
-                            <Heart className="w-4 h-4" />
-                          </Button>
-                          <Button size="sm" variant="outline">
-                            <Share className="w-4 h-4" />
+                        <div className="flex flex-col gap-2">
+                          <div className="flex gap-2">
+                            <Button size="sm" className="flex-1">
+                              <Users className="w-4 h-4 mr-2" />
+                              Follow
+                            </Button>
+                            <Button size="sm" variant="outline">
+                              <Play className="w-4 h-4" />
+                            </Button>
+                            <Button size="sm" variant="outline">
+                              <Heart className="w-4 h-4" />
+                            </Button>
+                            <Button size="sm" variant="outline">
+                              <Share className="w-4 h-4" />
+                            </Button>
+                          </div>
+                          <Button 
+                            size="sm" 
+                            variant="secondary" 
+                            className="w-full bg-gradient-to-r from-amber-500 to-yellow-500 text-white hover:from-amber-600 hover:to-yellow-600"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              navigate(`/profile/${creator.username.replace('@', '')}?tab=stake`);
+                            }}
+                          >
+                            <Coins className="w-4 h-4 mr-2" />
+                            Stake to Support
                           </Button>
                         </div>
                       </div>
@@ -314,18 +274,6 @@ export default function Explore() {
                 </motion.div>
               </motion.div>
             ))}
-          </motion.div>
-
-          {/* Load More */}
-          <motion.div
-            variants={staggerItem}
-            initial="initial"
-            animate="animate"
-            className="text-center mt-12"
-          >
-            <Button variant="outline" size="lg">
-              Load More Creators
-            </Button>
           </motion.div>
         </div>
       </motion.div>
