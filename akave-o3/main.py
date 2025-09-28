@@ -40,25 +40,31 @@ except Exception:
 
 def ensure_table(table_name: str):
     schema = Schema(
-        NestedField(1, "id", LongType(), required=True),
-        NestedField(2, "city", StringType(), required=True),
-        NestedField(3, "lat", DoubleType(), required=True),
-        NestedField(4, "lon", DoubleType(), required=True),
-        identifier_field_ids=[1],
+    NestedField(1, "earnings", DoubleType(), required=True),
+    NestedField(2, "views", LongType(), required=True),
+    NestedField(3, "likes", LongType(), required=True),
+    NestedField(4, "stakes", DoubleType(), required=True),
+    NestedField(5, "average_watch_time", DoubleType(), required=True),
+    NestedField(6, "unique_views", LongType(), required=True),
+    NestedField(7, "engagement_rate", DoubleType(), required=True),
+    NestedField(8, "token_price", DoubleType(), required=True),
+    NestedField(9, "token_volume", DoubleType(), required=True),
+    identifier_field_ids=[1],  # Using earnings as the identifier
     )
-    location = f"s3://test-bucket/warehouse/demo1/{table_name}"
+
+    location = f"s3://test-bucket/warehouse/demo/{table_name}"
 
     # 1) Create if missing; returns existing table if it already exists
     table = catalog.create_table_if_not_exists(
-        f"demo1.{table_name}",
+        f"demo.{table_name}",
         schema=schema,
         location=location,
     )
 
     # 2) Load to ensure the handle is fresh (optional, but consistent)
-    return catalog.load_table(f"demo1.{table_name}")
+    return catalog.load_table(f"demo.{table_name}")
 
-tbl = ensure_table("cities")
+tbl = ensure_table("CreatorsTribeCreatorTable")
 
 
 # Upsert and snapshot functions stay the same as before
@@ -73,13 +79,164 @@ def update_table(table, records, join_cols=None, update_on_match=True, insert_on
     )
 
 def get_snapshot(table, which="current", snapshot_id=None):
+
     if which == "current":
-        return table.current_snapshot()
-    if which == "by_id":
-        for s in table.snapshots():
-            if s.snapshot_id == snapshot_id:
-                return s
+        current_snap = table.current_snapshot()
+        return current_snap
+    
+    elif which == "by_id":
+        if snapshot_id is None:
+            raise ValueError("snapshot_id is required when which='by_id'")
+
+        try:
+            history = table.history()
+            for entry in history:
+                if entry.snapshot_id == snapshot_id:
+                    return entry
+        except AttributeError:
+            pass
+        
+        snapshots = table.snapshots()
+        for snapshot in snapshots:
+            if snapshot.snapshot_id == snapshot_id:
+                return snapshot
         return None
-    if which == "all":
+    
+    elif which == "all":
+        try:
+
+            history = list(table.history())
+            if history:
+                return history
+        except AttributeError:
+            pass
+        
         return list(table.snapshots())
-    raise ValueError("which must be one of: current | by_id | all")
+    
+    else:
+        raise ValueError("which must be one of: 'current', 'by_id', 'all'")
+
+
+def send_snapshot_to_ts_bucket(table, bucket_name="test-bucket-ts", which="current", snapshot_id=None):
+
+    import boto3
+    import json
+    from datetime import datetime
+    
+    # Initialize S3 client with your credentials
+    s3_client = boto3.client(
+        's3',
+        aws_access_key_id=os.environ['AWS_ACCESS_KEY_ID'],
+        aws_secret_access_key=os.environ['AWS_SECRET_ACCESS_KEY'],
+        endpoint_url=os.environ['AWS_ENDPOINT_URL'],
+        region_name=os.environ['AWS_DEFAULT_REGION']
+    )
+    
+    # Get snapshot(s) based on request
+    snapshot_data = get_snapshot(table, which=which, snapshot_id=snapshot_id)
+    
+    if snapshot_data is None:
+        print(f"No snapshot found for criteria: which={which}, snapshot_id={snapshot_id}")
+        return {"status": "error", "message": "No snapshot found"}
+    
+    # Get table metadata for context
+    table_name = table.name().split('.')[-1]  # Extract table name
+    namespace = table.name().split('.')[0] if '.' in table.name() else "default"
+    
+    results = {"status": "success", "uploaded_files": []}
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    
+    try:
+        if which == "all":
+            # Upload all snapshots as a single file
+            snapshots_data = {
+                "table_name": table_name,
+                "namespace": namespace,
+                "export_timestamp": timestamp,
+                "total_snapshots": len(snapshot_data),
+                "snapshots": []
+            }
+            
+            for snap in snapshot_data:
+                snap_info = {
+                    "snapshot_id": snap.snapshot_id,
+                    "timestamp_ms": snap.timestamp_ms if hasattr(snap, 'timestamp_ms') else None,
+                    "parent_snapshot_id": getattr(snap, 'parent_snapshot_id', None),
+                    "operation": getattr(snap, 'operation', None),
+                    "summary": getattr(snap, 'summary', {}),
+                    "manifest_list": getattr(snap, 'manifest_list', None)
+                }
+                snapshots_data["snapshots"].append(snap_info)
+            
+            # Upload all snapshots file
+            s3_key = f"iceberg_exports/{namespace}/{table_name}/all_snapshots_{timestamp}.json"
+            s3_client.put_object(
+                Bucket=bucket_name,
+                Key=s3_key,
+                Body=json.dumps(snapshots_data, indent=2, default=str),
+                ContentType='application/json'
+            )
+            results["uploaded_files"].append(s3_key)
+            print(f"Uploaded all {len(snapshot_data)} snapshots to: {s3_key}")
+            
+        else:
+            # Upload single snapshot (current or by_id)
+            snap_info = {
+                "table_name": table_name,
+                "namespace": namespace,
+                "export_timestamp": timestamp,
+                "snapshot_type": which,
+                "snapshot_data": {
+                    "snapshot_id": snapshot_data.snapshot_id,
+                    "timestamp_ms": snapshot_data.timestamp_ms if hasattr(snapshot_data, 'timestamp_ms') else None,
+                    "parent_snapshot_id": getattr(snapshot_data, 'parent_snapshot_id', None),
+                    "operation": getattr(snapshot_data, 'operation', None),
+                    "summary": getattr(snapshot_data, 'summary', {}),
+                    "manifest_list": getattr(snapshot_data, 'manifest_list', None)
+                }
+            }
+            
+            # Upload single snapshot file
+            snap_id = snapshot_data.snapshot_id
+            s3_key = f"iceberg_exports/{namespace}/{table_name}/{which}_snapshot_{snap_id}_{timestamp}.json"
+            s3_client.put_object(
+                Bucket=bucket_name,
+                Key=s3_key,
+                Body=json.dumps(snap_info, indent=2, default=str),
+                ContentType='application/json'
+            )
+            results["uploaded_files"].append(s3_key)
+            print(f"Uploaded {which} snapshot {snap_id} to: {s3_key}")
+        
+        # Also upload table metadata summary
+        table_metadata = {
+            "table_name": table_name,
+            "namespace": namespace,
+            "location": str(table.location()),
+            "schema": str(table.schema()),
+            "current_snapshot_id": table.current_snapshot().snapshot_id if table.current_snapshot() else None,
+            "export_timestamp": timestamp
+        }
+        
+        metadata_key = f"iceberg_exports/{namespace}/{table_name}/table_metadata_{timestamp}.json"
+        s3_client.put_object(
+            Bucket=bucket_name,
+            Key=metadata_key,
+            Body=json.dumps(table_metadata, indent=2, default=str),
+            ContentType='application/json'
+        )
+        results["uploaded_files"].append(metadata_key)
+        print(f"Uploaded table metadata to: {metadata_key}")
+        
+    except Exception as e:
+        print(f"Error uploading snapshot to S3: {e}")
+        results["status"] = "error"
+        results["error"] = str(e)
+    
+    return results
+
+
+
+
+
+

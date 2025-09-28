@@ -1,4 +1,5 @@
 import { toast } from '@/components/ui/use-toast';
+import { create_group, upload_content } from './synapse';
 
 interface UploadOptions {
   onProgress?: (progress: number) => void;
@@ -22,7 +23,8 @@ export async function uploadFile(
         if (progress >= 100) {
           clearInterval(interval);
           progress = 100;
-          
+          let grp = create_group();
+          const cid = await upload_content(grp, file);
           // Simulate a response with a URL
           const mockUrl = URL.createObjectURL(file);
           
