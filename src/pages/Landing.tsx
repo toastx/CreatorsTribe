@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import UnifiedWalletConnect from "@/components/UnifiedWalletConnect";
 import { 
   ArrowRight, 
   Zap, 
@@ -78,6 +79,11 @@ export default function Landing() {
         <HolographicOverlay />
         <FloatingElements />
         <ParticleField />
+        
+        {/* Unified Wallet Connect Button - Top Right */}
+        <div className="absolute top-6 right-6 z-20">
+          <UnifiedWalletConnect />
+        </div>
         
         <div className="relative z-10 max-w-7xl mx-auto px-6 py-20 md:py-32 min-h-screen flex items-center">
           <motion.div

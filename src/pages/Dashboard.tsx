@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import UnifiedWalletConnect from "@/components/UnifiedWalletConnect";
 import { 
   TrendingUp, 
   Users, 
@@ -148,6 +149,7 @@ export default function Dashboard() {
                 <p className="text-muted-foreground">Here's what's happening with your creator token today.</p>
               </div>
               <div className="flex items-center space-x-3 mt-4 md:mt-0">
+                <UnifiedWalletConnect />
                 <Badge className="bg-creator/10 text-creator border-creator/20">
                   <Zap className="w-3 h-3 mr-1" />
                   Premium Creator

@@ -1,0 +1,484 @@
+import { useState } from "react";
+import { motion } from "framer-motion";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { 
+  Edit, 
+  Settings, 
+  Link as LinkIcon, 
+  Calendar, 
+  MapPin, 
+  Globe, 
+  Image as ImageIcon, 
+  Video, 
+  Music, 
+  FileText,
+  Heart,
+  MessageCircle,
+  Share2,
+  MoreHorizontal,
+  Plus
+} from "lucide-react";
+import { pageTransitions, staggerContainer, staggerItem, cardHover } from "@/lib/motion";
+import { Navbar } from "@/components/ui/navbar";
+import { Separator } from "@/components/ui/separator";
+
+// Mock data
+const userData = {
+  name: "Alex Johnson",
+  username: "@alexjohnson",
+  bio: "Digital creator | Photographer | Travel enthusiast | Coffee addict ☕",
+  location: "San Francisco, CA",
+  website: "alexjohnson.design",
+  joinDate: "Joined March 2023",
+  avatar: "https://randomuser.me/api/portraits/men/32.jpg",
+  coverImage: "https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2000",
+  stats: {
+    followers: "12.5K",
+    following: "842",
+    content: "156",
+    likes: "24.7K"
+  },
+  social: {
+    twitter: "@alexjohnson",
+    instagram: "@alexjohnson.photo",
+    discord: "alexjohnson#1234"
+  }
+};
+
+const contentItems = [
+  {
+    id: 1,
+    type: 'image',
+    url: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=1000',
+    likes: 1245,
+    comments: 89,
+    title: 'Sunset at the beach',
+    isExclusive: false
+  },
+  {
+    id: 2,
+    type: 'video',
+    url: 'https://assets.mixkit.co/videos/preview/mixkit-woman-taking-photos-of-flowers-close-up-3987-large.mp4',
+    likes: 2456,
+    comments: 156,
+    title: 'Photography Tutorial',
+    isExclusive: true
+  },
+  {
+    id: 3,
+    type: 'image',
+    url: 'https://images.unsplash.com/photo-1511497584788-876bf1112e95?q=80&w=1000',
+    likes: 897,
+    comments: 42,
+    title: 'City Lights',
+    isExclusive: false
+  },
+  {
+    id: 4,
+    type: 'audio',
+    url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
+    likes: 567,
+    comments: 23,
+    title: 'Morning Vibes',
+    isExclusive: true
+  },
+  {
+    id: 5,
+    type: 'image',
+    url: 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1000',
+    likes: 1789,
+    comments: 134,
+    title: 'Mountain View',
+    isExclusive: false
+  },
+  {
+    id: 6,
+    type: 'document',
+    url: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
+    likes: 321,
+    comments: 15,
+    title: 'Photography Guide',
+    isExclusive: true
+  },
+];
+
+export default function Profile() {
+  const [isFollowing, setIsFollowing] = useState(false);
+  const [activeTab, setActiveTab] = useState('content');
+  
+  const renderContentIcon = (type: string) => {
+    switch (type) {
+      case 'image':
+        return <ImageIcon className="w-4 h-4" />;
+      case 'video':
+        return <Video className="w-4 h-4" />;
+      case 'audio':
+        return <Music className="w-4 h-4" />;
+      case 'document':
+        return <FileText className="w-4 h-4" />;
+      default:
+        return <FileText className="w-4 h-4" />;
+    }
+  };
+
+  return (
+    <motion.div
+      initial="initial"
+      animate="animate"
+      exit="exit"
+      variants={pageTransitions}
+      className="min-h-screen bg-background"
+    >
+      <Navbar />
+      
+      {/* Cover Photo */}
+      <div className="relative h-64 w-full bg-gradient-to-r from-blue-500 to-purple-600">
+            <div className="absolute bottom-4 right-4">
+              <Button variant="outline" size="sm" className="bg-background/80 backdrop-blur-sm">
+                <Edit className="w-4 h-4 mr-2" />
+                Edit Profile
+              </Button>
+            </div>
+          </div>
+
+      {/* Profile Header */}
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 -mt-16">
+        <div className="flex flex-col md:flex-row gap-6">
+          {/* Left Column - Profile Info */}
+          <div className="md:w-1/3 lg:w-1/4 space-y-6">
+            <Card className="overflow-hidden">
+              <div className="p-6">
+                <div className="flex flex-col items-center text-center space-y-4">
+                  <Avatar className="h-32 w-32 -mt-16 border-4 border-background">
+                    <AvatarImage src={userData.avatar} />
+                    <AvatarFallback>{userData.name.charAt(0)}</AvatarFallback>
+                  </Avatar>
+                  
+                  <div className="space-y-2">
+                    <h1 className="text-2xl font-bold">{userData.name}</h1>
+                    <p className="text-muted-foreground">{userData.username}</p>
+                    
+                    <div className="flex justify-center space-x-4 pt-2">
+                      <Button 
+                        variant={isFollowing ? "outline" : "default"} 
+                        onClick={() => setIsFollowing(!isFollowing)}
+                      >
+                        {isFollowing ? 'Following' : 'Follow'}
+                      </Button>
+                      <Button variant="outline" size="icon">
+                        <MoreHorizontal className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </div>
+                  
+                  <p className="text-sm text-muted-foreground">{userData.bio}</p>
+                  
+                  <div className="flex flex-wrap justify-center gap-2">
+                    {userData.location && (
+                      <div className="flex items-center text-sm text-muted-foreground">
+                        <MapPin className="h-4 w-4 mr-1" />
+                        {userData.location}
+                      </div>
+                    )}
+                    {userData.website && (
+                      <a 
+                        href={`https://${userData.website}`} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="flex items-center text-sm text-primary hover:underline"
+                      >
+                        <Globe className="h-4 w-4 mr-1" />
+                        {userData.website}
+                      </a>
+                    )}
+                    <div className="flex items-center text-sm text-muted-foreground">
+                      <Calendar className="h-4 w-4 mr-1" />
+                      {userData.joinDate}
+                    </div>
+                  </div>
+                </div>
+                
+                <Separator className="my-4" />
+                
+                <div className="grid grid-cols-2 gap-4 text-center">
+                  <div>
+                    <div className="text-2xl font-bold">{userData.stats.followers}</div>
+                    <div className="text-sm text-muted-foreground">Followers</div>
+                  </div>
+                  <div>
+                    <div className="text-2xl font-bold">{userData.stats.following}</div>
+                    <div className="text-sm text-muted-foreground">Following</div>
+                  </div>
+                  <div>
+                    <div className="text-2xl font-bold">{userData.stats.content}</div>
+                    <div className="text-sm text-muted-foreground">Content</div>
+                  </div>
+                  <div>
+                    <div className="text-2xl font-bold">{userData.stats.likes}</div>
+                    <div className="text-sm text-muted-foreground">Likes</div>
+                  </div>
+                </div>
+              </div>
+            </Card>
+            
+            {/* Social Links */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Connect</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                {userData.social.twitter && (
+                  <div className="flex items-center">
+                    <svg className="h-5 w-5 mr-2 text-blue-400" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" />
+                    </svg>
+                    <span className="text-sm">{userData.social.twitter}</span>
+                  </div>
+                )}
+                {userData.social.instagram && (
+                  <div className="flex items-center">
+                    <svg className="h-5 w-5 mr-2 text-pink-500" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+                    </svg>
+                    <span className="text-sm">{userData.social.instagram}</span>
+                  </div>
+                )}
+                {userData.social.discord && (
+                  <div className="flex items-center">
+                    <svg className="h-5 w-5 mr-2 text-indigo-500" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M20.317 4.37a19.791 19.791 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.617-1.25.077.077 0 00-.079-.037A19.736 19.736 0 003.677 4.37a.07.07 0 00-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 00.031.057 19.9 19.9 0 005.993 3.03.078.078 0 00.084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 00-.041-.106 13.107 13.107 0 01-1.872-.892.077.077 0 01-.008-.128 10.2 10.2 0 00.372-.292.074.074 0 01.077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 01.078.01c.12.098.246.198.373.292a.077.077 0 01-.006.127 12.299 12.299 0 01-1.873.892.077.077 0 00-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 00.084.028 19.84 19.84 0 006.006-3.03.077.077 0 00.032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 00-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.946-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.954-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z" />
+                    </svg>
+                    <span className="text-sm">{userData.social.discord}</span>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </div>
+          
+          {/* Right Column - Content */}
+          <div className="md:w-2/3 lg:w-3/4 space-y-6">
+            {/* Tabs */}
+            <Card>
+              <Tabs defaultValue="content" className="w-full">
+                <TabsList className="w-full justify-start rounded-none border-b bg-transparent p-0">
+                  <TabsTrigger 
+                    value="content" 
+                    className="relative h-12 rounded-none border-b-2 border-b-transparent bg-transparent px-4 pb-4 pt-2 font-semibold text-muted-foreground shadow-none transition-none data-[state=active]:border-b-primary data-[state=active]:text-foreground data-[state=active]:shadow-none"
+                    onClick={() => setActiveTab('content')}
+                  >
+                    Content
+                  </TabsTrigger>
+                  <TabsTrigger 
+                    value="about" 
+                    className="relative h-12 rounded-none border-b-2 border-b-transparent bg-transparent px-4 pb-4 pt-2 font-semibold text-muted-foreground shadow-none transition-none data-[state=active]:border-b-primary data-[state=active]:text-foreground data-[state=active]:shadow-none"
+                    onClick={() => setActiveTab('about')}
+                  >
+                    About
+                  </TabsTrigger>
+                  <TabsTrigger 
+                    value="collections" 
+                    className="relative h-12 rounded-none border-b-2 border-b-transparent bg-transparent px-4 pb-4 pt-2 font-semibold text-muted-foreground shadow-none transition-none data-[state=active]:border-b-primary data-[state=active]:text-foreground data-[state=active]:shadow-none"
+                    onClick={() => setActiveTab('collections')}
+                  >
+                    Collections
+                  </TabsTrigger>
+                  <TabsTrigger 
+                    value="activity" 
+                    className="relative h-12 rounded-none border-b-2 border-b-transparent bg-transparent px-4 pb-4 pt-2 font-semibold text-muted-foreground shadow-none transition-none data-[state=active]:border-b-primary data-[state=active]:text-foreground data-[state=active]:shadow-none"
+                    onClick={() => setActiveTab('activity')}
+                  >
+                    Activity
+                  </TabsTrigger>
+                </TabsList>
+                
+                <div className="p-6">
+                  {activeTab === 'content' && (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                      {contentItems.map((item) => (
+                        <Card key={item.id} className="group relative overflow-hidden">
+                          <div className="aspect-square bg-muted/50 relative">
+                            {item.type === 'image' && (
+                              <img 
+                                src={item.url} 
+                                alt={item.title}
+                                className="w-full h-full object-cover group-hover:opacity-75 transition-opacity"
+                              />
+                            )}
+                            {item.type === 'video' && (
+                              <video 
+                                src={item.url}
+                                className="w-full h-full object-cover group-hover:opacity-75 transition-opacity"
+                                muted
+                                loop
+                              />
+                            )}
+                            {item.type === 'audio' && (
+                              <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-purple-100 to-blue-100">
+                                <div className="text-center p-6">
+                                  <Music className="w-12 h-12 mx-auto text-purple-500 mb-2" />
+                                  <p className="font-medium">{item.title}</p>
+                                  <p className="text-sm text-muted-foreground">Audio File</p>
+                                </div>
+                              </div>
+                            )}
+                            {item.type === 'document' && (
+                              <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-100 to-cyan-100">
+                                <div className="text-center p-6">
+                                  <FileText className="w-12 h-12 mx-auto text-blue-500 mb-2" />
+                                  <p className="font-medium">{item.title}</p>
+                                  <p className="text-sm text-muted-foreground">PDF Document</p>
+                                </div>
+                              </div>
+                            )}
+                            
+                            {item.isExclusive && (
+                              <Badge className="absolute top-2 right-2 bg-yellow-500 hover:bg-yellow-600">
+                                Exclusive
+                              </Badge>
+                            )}
+                            
+                            <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center space-x-4">
+                              <Button variant="ghost" size="sm" className="rounded-full bg-white/20 text-white hover:bg-white/30">
+                                <Heart className="h-4 w-4 mr-1" />
+                                <span>{item.likes}</span>
+                              </Button>
+                              <Button variant="ghost" size="sm" className="rounded-full bg-white/20 text-white hover:bg-white/30">
+                                <MessageCircle className="h-4 w-4 mr-1" />
+                                <span>{item.comments}</span>
+                              </Button>
+                              <Button variant="ghost" size="sm" className="rounded-full bg-white/20 text-white hover:bg-white/30">
+                                <Share2 className="h-4 w-4" />
+                              </Button>
+                            </div>
+                          </div>
+                          <div className="p-3">
+                            <div className="flex items-center justify-between">
+                              <h3 className="font-medium truncate">{item.title}</h3>
+                              <div className="flex-shrink-0 ml-2">
+                                {renderContentIcon(item.type)}
+                              </div>
+                            </div>
+                          </div>
+                        </Card>
+                      ))}
+                    </div>
+                  )}
+                  
+                  {activeTab === 'about' && (
+                    <div className="space-y-6">
+                      <div>
+                            <h3 className="text-lg font-semibold mb-2">Bio</h3>
+                            <p className="text-muted-foreground">
+                              {userData.bio}
+                            </p>
+                          </div>
+                          
+                          <div>
+                            <h3 className="text-lg font-semibold mb-3">Skills & Expertise</h3>
+                            <div className="flex flex-wrap gap-2">
+                              {['Photography', 'Photo Editing', 'Lightroom', 'Photoshop', 'Portrait', 'Landscape'].map((skill) => (
+                                <Badge key={skill} variant="outline">
+                                  {skill}
+                                </Badge>
+                              ))}
+                            </div>
+                          </div>
+                          
+                          <div>
+                            <h3 className="text-lg font-semibold mb-3">Achievements</h3>
+                            <div className="space-y-4">
+                              <div className="flex items-start">
+                                <div className="bg-primary/10 p-2 rounded-full mr-3">
+                                  <Star className="h-5 w-5 text-yellow-500" />
+                                </div>
+                                <div>
+                                  <h4 className="font-medium">Top Creator of the Month</h4>
+                                  <p className="text-sm text-muted-foreground">March 2024</p>
+                                </div>
+                              </div>
+                              <div className="flex items-start">
+                                <div className="bg-primary/10 p-2 rounded-full mr-3">
+                                  <Zap className="h-5 w-5 text-blue-500" />
+                                </div>
+                                <div>
+                                  <h4 className="font-medium">Early Adopter</h4>
+                                  <p className="text-sm text-muted-foreground">Joined in the first month</p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                      
+                      {activeTab === 'collections' && (
+                        <div className="text-center py-12">
+                          <div className="mx-auto h-16 w-16 rounded-full bg-muted flex items-center justify-center mb-4">
+                            <FolderPlus className="h-8 w-8 text-muted-foreground" />
+                          </div>
+                          <h3 className="text-lg font-medium">No collections yet</h3>
+                          <p className="text-muted-foreground mt-1">
+                            Create your first collection to organize your content
+                          </p>
+                          <Button className="mt-4">
+                            <Plus className="h-4 w-4 mr-2" />
+                            New Collection
+                          </Button>
+                        </div>
+                      )}
+                      
+                      {activeTab === 'activity' && (
+                        <div className="space-y-6">
+                          <div className="flex items-center justify-between">
+                            <h3 className="text-lg font-semibold">Recent Activity</h3>
+                            <Button variant="outline" size="sm">
+                              View All
+                            </Button>
+                          </div>
+                          
+                          <div className="space-y-4">
+                            {[1, 2, 3, 4, 5].map((item) => (
+                              <div key={item} className="flex items-start pb-4 border-b">
+                                <Avatar className="h-10 w-10 mr-3">
+                                  <AvatarImage src={`https://randomuser.me/api/portraits/${Math.random() > 0.5 ? 'men' : 'women'}/${Math.floor(Math.random() * 50)}.jpg`} />
+                                  <AvatarFallback>U</AvatarFallback>
+                                </Avatar>
+                                <div className="flex-1">
+                                  <div className="flex items-center justify-between">
+                                    <div>
+                                      <span className="font-medium">User{Math.floor(Math.random() * 1000)}</span>
+                                      <span className="text-muted-foreground mx-1.5">•</span>
+                                      <span className="text-sm text-muted-foreground">{Math.floor(Math.random() * 24)}h ago</span>
+                                    </div>
+                                    <Button variant="ghost" size="icon" className="h-8 w-8">
+                                      <MoreHorizontal className="h-4 w-4" />
+                                    </Button>
+                                  </div>
+                                  <p className="text-sm mt-0.5">
+                                    {[
+                                      'liked your photo',
+                                      'started following you',
+                                      'commented: "Amazing work!"',
+                                      'purchased your content',
+                                      'shared your post'
+                                    ][Math.floor(Math.random() * 5)]}
+                                  </p>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </Tabs>
+                </Card>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+      );
+    }

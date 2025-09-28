@@ -1,9 +1,10 @@
 {
 	"contracts": {
-		"Counter": {
-			"source": "cadence/contracts/Counter.cdc",
+		"SocialCore": {
+			"source": "cadence/contracts/SocialCore.cdc",
 			"aliases": {
-				"testing": "0000000000000007"
+				"emulator": "0x06",
+				"testing": "0x06"
 			}
 		}
 	},
